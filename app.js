@@ -1,6 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
 const multer = require("multer");
 const cors = require("cors");
 
@@ -11,7 +12,7 @@ username = "1234";
 password = "1234";
 const upload = multer({ dest: "/fileUploads" });
 // app.use(bodyParser.json());
-
+app.use(cookieParser());
 app.use(bodyParser.urlencoded());
 
 app.use(
@@ -45,9 +46,11 @@ app.post("/login", cors(), (req, res) => {
 
 app.post("/virement", cors(), upload.single("upload_file"), (req, res) => {
   // if (req.session.islogged == true) {
+  console.log(req);
   console.log("we recieved your playload 'virement de mass'");
   console.log("this is your file: ", req.file);
   console.log(req.body);
+  console.log(req);
   // }
 
   res.status(200);
