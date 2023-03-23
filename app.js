@@ -1,26 +1,29 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const app = express();
-const cors = require("cors");
-const port = 3000;
 const session = require("express-session");
+const bodyParser = require("body-parser");
+const multer = require("multer");
+const cors = require("cors");
+
+const app = express();
+const port = 3000;
 
 username = "1234";
 password = "1234";
-
-app.use(bodyParser.json());
+const upload = multer({ dest: "/fileUploads" });
+// app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded());
 
 app.use(
   session({
     secret: "thisismysecret",
-    cookie: { maxAge: 60000 }, // value of maxAge is defined in milliseconds. 
+    cookie: { maxAge: 60000 }, // value of maxAge is defined in milliseconds.
     resave: false,
     rolling: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    islogged: false,
   })
-  );
+);
 
 app.get("/", cors(), (req, res) => {
   res.send("This is a simulation ");
@@ -32,21 +35,30 @@ app.post("/login", cors(), (req, res) => {
       expires: new Date(new Date().getTime() + 1000 * 6),
       secure: true,
     });
-    res.cookie() = req.cookies();
-    console.log(res);
+    console.log(req.body);
     res.send();
   }
+  console.log(req.body);
   res.status(200);
   res.end();
 });
 
-app.post("/virement", cors(), (req, res) => {
-  console.log(req.session);
-  console.log(JSON.stringify(req.body));
+app.post("/virement", cors(), upload.single("upload_file"), (req, res) => {
+  // if (req.session.islogged == true) {
+  console.log("we recieved your playload 'virement de mass'");
+  console.log("this is your file: ", req.file);
+  console.log(req.body);
+  // }
+
   res.status(200);
   res.end();
 });
 
+app.post("/otp", cors(), (req, res) => {
+  console.log(req.body);
+  res.status(200);
+  res.end();
+});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
