@@ -45,20 +45,26 @@ app.post("/login", cors(), (req, res) => {
 });
 
 app.post("/virement", cors(), upload.single("upload_file"), (req, res) => {
-  // if (req.session.islogged == true) {
-  console.log(req);
-  console.log("we recieved your playload 'virement de mass'");
-  console.log("this is your file: ", req.file);
-  console.log(req.body);
-  console.log(req);
-  // }
+  islogged = req.cookies["islogged"];
+  console.log(islogged);
+  if (islogged) {
+    console.log("we recieved your playload 'virement de mass'");
+    console.log("this is your file: ", req.file);
+    console.log(req.body);
+  }
 
   res.status(200);
   res.end();
 });
 
 app.post("/otp", cors(), (req, res) => {
-  console.log(req.body);
+  islogged = req.cookies["islogged"];
+  console.log(islogged);
+  if (islogged) {
+    console.log();
+    console.log("we recieved otp");
+    console.log(req.body);
+  }
   res.status(200);
   res.end();
 });
